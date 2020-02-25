@@ -1,23 +1,23 @@
 const { ApolloServer, gql } = require("apollo-server");
+const faker = require("faker");
 
 // Schema
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
 const typeDefs = gql`
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-  # This "Book" type defines the queryable fields for every book in our data source.
   type Book {
     title: String
     author: String
   }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
+  type Person {
+    image: String
+    firstName: String
+    lastName: String
+    jobTitle: String
+  }
+
   type Query {
-    books: [Book]
+    books: [Book],
+    persons: [Person]
   }
 `;
 
@@ -33,21 +33,24 @@ const books = [
   }
 ];
 
-// 3. Resolver
-// Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
+const persons = new Array(20).fill({
+  image: faker.image.avatar(),
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  jobTitle: faker.name.jobTitle()
+});
+
+// Resolver
 const resolvers = {
   Query: {
-    books: () => books
+    books: () => books,
+    persons: () => persons
   }
 };
 
-// 4. Create an instance of ApolloServer
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
+// Create an instance of ApolloServer
 const server = new ApolloServer({ typeDefs, resolvers });
 
-// The `listen` method launches a web server.
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
