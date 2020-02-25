@@ -1,5 +1,5 @@
 {
-  "name": "apollo-graphql-starter",
+  "name": "apollo-graphql-server-starter",
   "version": "0.0.1",
   "description": "graphql-server-starter usage typescript",
   "main": "src/index.ts",

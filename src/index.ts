@@ -16,8 +16,12 @@ const typeDefs = gql`
   }
 
   type Query {
-    books: [Book],
+    books: [Book]
     persons: [Person]
+  }
+
+  type Mutation {
+    addBook(title: String, author: String): Book
   }
 `;
 
@@ -33,7 +37,7 @@ const books = [
   }
 ];
 
-const persons = new Array(20).fill({
+const persons = new Array(10).fill({
   image: faker.image.avatar(),
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
