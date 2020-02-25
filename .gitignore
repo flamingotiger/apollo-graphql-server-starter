@@ -1,0 +1,45 @@
+.DS_Store
+
+# Production
+/build
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# local .env* files
+.env.local
+.env.*.local
+
+# webstorm config
+.idea
+
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Generated files
+.idea/**/contentModel.xml
+
+# Sensitive or high-churn files
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# File-based project format
+*.iws
+
+# Coverage directory used by tools like istanbul
+reports
+
+# package-lock.json
+package-lock.json

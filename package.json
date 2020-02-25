@@ -1,0 +1,17 @@
+{
+  "name": "graphql-server-starter",
+  "version": "0.0.1",
+  "description": "graphql-server-starter usage typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.10.1",
+    "graphql": "^14.6.0",
+    "typescript": "^3.8.2"
+  }
+}
