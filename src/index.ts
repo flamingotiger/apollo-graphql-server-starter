@@ -1,30 +1,48 @@
-import { ApolloServer } from "apollo-server";
-import { typeDefs } from "./schema";
 
+const express = require('express');
+const bodyParser = require('body-parser');
+const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
+const { makeExecutableSchema } = require('graphql-tools');
+
+// Some fake data
 const books = [
   {
-    title: "Harry Potter and Chamber of Secrets",
-    author: "J.K. Rowling"
+    title: "Harry Potter and the Sorcerer's stone",
+    author: 'J.K. Rowling',
   },
   {
-    title: "Jurassic Park",
-    author: "Michael Crichton"
-  }
+    title: 'Jurassic Park',
+    author: 'Michael Crichton',
+  },
 ];
 
-// Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
+// The GraphQL schema in string form
+const typeDefs = `
+  type Query { books: [Book] }
+  type Book { title: String, author: String }
+`;
+
+// The resolvers
 const resolvers = {
-  Query: {
-    books: () => books
-  }
+  Query: { books: () => books },
 };
 
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
-const server = new ApolloServer({ typeDefs, resolvers });
+// Put together a schema
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
 
-// The `listen` method launches a web server.
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+// Initialize the app
+const app = express();
+
+// The GraphQL endpoint
+app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+
+// GraphiQL, a visual editor for queries
+app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+
+// Start the server
+app.listen(3000, () => {
+  console.log('Go to http://localhost:3000/graphiql to run queries!');
 });
