@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql, AuthenticationError } = require("apollo-server");
 const faker = require("faker");
 
 // Schema
@@ -9,16 +9,18 @@ const typeDefs = gql`
     author: String
   }
 
-  type Person {
+  type User {
+    id: Int!
     image: String
-    firstName: String
-    lastName: String
     jobTitle: String
+    email: String
+    username: String
+    password: String
   }
 
   type Query {
     books: [Book]
-    persons: [Person]
+    users: [User]
   }
 
   type Mutation {
@@ -50,23 +52,33 @@ const books = [
   }
 ];
 
-const persons = new Array(10).fill({
-  image: faker.image.avatar(),
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  jobTitle: faker.name.jobTitle()
-});
+const users = new Array(10)
+  .fill(null)
+  .map((user, index) => {
+    user = {
+      id: index,
+      image: faker.image.avatar(),
+      jobTitle: faker.name.jobTitle(),
+      username: faker.name.lastName() + faker.name.firstName(),
+      email: faker.internet.email(),
+      password: faker.internet.password()
+    };
+    return user;
+  });
 
 // Resolver
 const resolvers = {
   Query: {
     books: () => books,
-    persons: () => persons
+    users: () => users
   }
 };
 
 // Create an instance of ApolloServer
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers
+});
 
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
