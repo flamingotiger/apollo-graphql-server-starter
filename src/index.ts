@@ -4,6 +4,7 @@ const faker = require("faker");
 // Schema
 const typeDefs = gql`
   type Book {
+    id: Int!
     title: String
     author: String
   }
@@ -28,12 +29,24 @@ const typeDefs = gql`
 // Data set
 const books = [
   {
-    title: "Harry Potter and the Chamber of Secrets",
-    author: "J.K. Rowling"
+    id: 1,
+    title: "지적 대화를 위한 넓고 얕은 지식: 제로편",
+    author: "채사장"
   },
   {
-    title: "Jurassic Park",
-    author: "Michael Crichton"
+    id: 2,
+    title: "하버드 상위 1퍼센트의 비밀(리커버 에디션)",
+    author: "정주영"
+  },
+  {
+    id: 3,
+    title: "지쳤거나 좋아하는 게 없거나",
+    author: "글배우"
+  },
+  {
+    id: 4,
+    title: "내가 원하는 것을 나도 모를 때",
+    author: "전승환"
   }
 ];
 
