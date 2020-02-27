@@ -1,26 +1,29 @@
 {
   "name": "apollo-graphql-server-starter",
   "version": "0.0.1",
-  "description": "graphql-server-starter usage typescript",
+  "description": "apollo-graphql-server-starter usage typescript",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "node src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.10.1",
+    "apollo-server-express": "^2.10.1",
+    "bcrypt": "^4.0.0",
+    "cors": "^2.8.5",
     "faker": "^4.1.0",
     "graphql": "^14.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.2",
     "typescript": "^3.8.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/node": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
     "@types/faker": "^4.1.10",
-    "nodemon": "^2.0.2"
+    "@types/node": "^13.7.6",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.6.2"
   }
 }
