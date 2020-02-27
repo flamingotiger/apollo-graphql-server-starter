@@ -1,83 +1,57 @@
-import { ApolloServer, gql } from "apollo-server";
-import faker from "faker";
+import cors from "cors";
+import express from "express";
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+mongoose.set("useFindAndModify", false);
+import { ApolloServer, AuthenticationError } from "apollo-server-express";
+import compression from "compression";
 
-// Schema
-const typeDefs = gql`
-  type Book {
-    id: Int!
-    title: String
-    author: String
-  }
+import schemas from "./schemas";
+import resolvers from "./resolvers";
 
-  type User {
-    id: Int!
-    image: String
-    jobTitle: String
-    email: String
-    username: String
-    password: String
-  }
+import userModel from "./models/userModel";
+import postModel from "./models/postModel";
 
-  type Query {
-    books: [Book]
-    users: [User]
-  }
+const app = express();
+app.use("*", cors());
+app.use(compression());
 
-  type Mutation {
-    addBook(title: String, author: String): Book
-  }
-`;
+const getUser = async (req: any) => {
+  const token = req.headers["token"];
 
-// Data set
-const books = [
-  {
-    id: 1,
-    title: "지적 대화를 위한 넓고 얕은 지식: 제로편",
-    author: "채사장"
-  },
-  {
-    id: 2,
-    title: "하버드 상위 1퍼센트의 비밀(리커버 에디션)",
-    author: "정주영"
-  },
-  {
-    id: 3,
-    title: "지쳤거나 좋아하는 게 없거나",
-    author: "글배우"
-  },
-  {
-    id: 4,
-    title: "내가 원하는 것을 나도 모를 때",
-    author: "전승환"
-  }
-];
-
-const users = new Array(5).fill(null).map((user, index) => {
-  user = {
-    id: index,
-    image: faker.image.avatar(),
-    jobTitle: faker.name.jobTitle(),
-    username: faker.name.lastName() + faker.name.firstName(),
-    email: faker.internet.email(),
-    password: faker.internet.password()
-  };
-  return user;
-});
-
-// Resolver
-const resolvers = {
-  Query: {
-    books: () => books,
-    users: () => users
+  if (token) {
+    try {
+      return await jwt.verify(token, "riddlemethis");
+    } catch (e) {
+      throw new AuthenticationError("Your session expired. Sign in again.");
+    }
   }
 };
 
-// Create an instance of ApolloServer
 const server = new ApolloServer({
-  typeDefs,
-  resolvers
+  typeDefs: schemas,
+  resolvers,
+  context: async ({ req }) => {
+    if (req) {
+      const me = await getUser(req);
+
+      return {
+        me,
+        models: {
+          userModel,
+          postModel
+        }
+      };
+    }
+  }
 });
 
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+server.applyMiddleware({ app, path: "/graphql" });
+
+app.listen(5000, () => {
+  mongoose.connect("mongodb://localhost:27017/graphql", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+  console.log(`🏄‍♀️ connected server`);
 });
