@@ -1,5 +1,5 @@
-const { ApolloServer, gql, AuthenticationError } = require("apollo-server");
-const faker = require("faker");
+import { ApolloServer, gql } from "apollo-server";
+import faker from "faker";
 
 // Schema
 const typeDefs = gql`
@@ -52,19 +52,17 @@ const books = [
   }
 ];
 
-const users = new Array(10)
-  .fill(null)
-  .map((user, index) => {
-    user = {
-      id: index,
-      image: faker.image.avatar(),
-      jobTitle: faker.name.jobTitle(),
-      username: faker.name.lastName() + faker.name.firstName(),
-      email: faker.internet.email(),
-      password: faker.internet.password()
-    };
-    return user;
-  });
+const users = new Array(5).fill(null).map((user, index) => {
+  user = {
+    id: index,
+    image: faker.image.avatar(),
+    jobTitle: faker.name.jobTitle(),
+    username: faker.name.lastName() + faker.name.firstName(),
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  };
+  return user;
+});
 
 // Resolver
 const resolvers = {
