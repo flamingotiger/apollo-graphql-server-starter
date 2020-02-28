@@ -34,7 +34,6 @@ const server = new ApolloServer({
   context: async ({ req }) => {
     if (req) {
       const me = await getUser(req);
-
       return {
         me,
         models: {

@@ -4,6 +4,18 @@ import { AuthenticationError } from "apollo-server";
 
 export default {
   Query: {
+    me: async (
+      _: any,
+      args: any,
+      { models: { userModel }, me }: { models: any; me: any },
+      info: any
+    ) => {
+      if (!me) {
+        throw new AuthenticationError("You are not authenticated");
+      }
+      const user = await userModel.findById({ _id: me.id }).exec();
+      return user;
+    },
     user: async (
       _: any,
       { id }: { id: string },
